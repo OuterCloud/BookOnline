@@ -1,0 +1,58 @@
+<html>
+	<head style="margin-top: 50px">
+		<meta charset="utf-8">
+		<title>OCB在线点餐平台</title>
+		<!--BootStrap-->
+		<link rel="stylesheet" href="{{ url_for('static', filename = 'bootstrap/bootstrap.min.css') }}">
+		<!--BootStrap-->
+		<script src="{{ url_for('static', filename = 'bootstrap/jquery.min.js') }}"></script>
+		<script src="{{ url_for('static', filename = 'bootstrap/bootstrap.min.js') }}"></script>
+		<!--chuncai-->
+		<script src="{{ url_for('static', filename = 'js/chuncai/jquery.js') }}"></script>
+		<script src="{{ url_for('static', filename = 'js/chuncai/chuncai.js') }}"></script>
+		{% block refer %}{% endblock %}
+	</head>
+	<nav class="navbar-inverse navbar-fixed-top" role="navigation">
+		<div class="container-fluid">
+	    <div class="navbar-header">
+	        <a class="navbar-brand" href="{{ url_for('index') }}">OCB在线点餐系统</a>
+	    </div>
+	    <div>
+	        <ul class="nav navbar-nav">
+	            <li><a href="{{ url_for('book') }}">点餐</a></li>
+	            <li><a href="{{ url_for('favor') }}">销量</a></li>
+	            <li class="dropdown">
+	                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+	                    结算 <b class="caret"></b>
+	                </a>
+	                <ul class="dropdown-menu">
+	                    <li><a href="#">日结算</a></li>
+	                    <li class="divider"></li>
+	                    <li><a href="#">月结算</a></li>
+	                    <li class="divider"></li>
+	                    <li><a href="#">季度结算</a></li>
+	                    <li class="divider"></li>
+	                    <li><a href="#">年度结算</a></li>
+	                </ul>
+	            </li>
+	        </ul>
+	    </div>
+		</div>
+	</nav>
+	{% block theBody %}
+		<body style="margin-top: 50px; padding-bottom: 200px;">
+			<script type="text/javascript">
+				$.chuncai();
+			</script>
+			
+		</body>
+	{% endblock %}
+	<!--页脚html-->
+	<div id="footer" class="container">
+		<nav class="navbar navbar-default navbar-fixed-bottom">
+			<div class="navbar-inner navbar-content-center">
+				<p class="text-muted credit" style="padding: 10px;text-align: center;">Copyright © <strong>OuterCloudBack</strong> All Rights Reserved.</p>
+			</div>
+		</nav>
+	</div>
+</html>

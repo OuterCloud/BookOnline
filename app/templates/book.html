@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+{% block refer %}
+    {{ super() }}
+    <!--block后面起名字要注意，这里叫refer，叫什么别叫head，否则以下文件加载不进来-->
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/docs.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/book.css') }}">
+    <script src="{{ url_for('static', filename = 'js/book.js') }}"></script>
+{% endblock %}
+{% block theBody %}
+<div class="container">
+    <div class="row">
+        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 bs-docs-sidebar" style="margin-top: 60px;">
+            <!--左侧导航栏-->
+            <ul class="nav nav-list bs-docs-sidenav affix">
+                <li><a href="#chaocai"><i class="icon-chevron-right"></i> 炒菜</a></li>
+                <li><a href="#duncai"><i class="icon-chevron-right"></i> 炖菜</a></li>
+                <li><a href="#xican"><i class="icon-chevron-right"></i> 西餐</a></li>
+                <li><a href="#liangcai"><i class="icon-chevron-right"></i> 凉菜</a></li>
+                <li><a href="#jiulei"><i class="icon-chevron-right"></i> 酒类</a></li>
+                <li><a href="#yinliao"><i class="icon-chevron-right"></i> 饮料</a></li>
+                <li><a href="#shui"><i class="icon-chevron-right"></i> 水</a></li>
+            </ul>
+        </div>
+        <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
+            <div>
+                <section id="chaocai">
+                    <div class="page-header">
+                        <h1>炒菜</h1>
+                    </div>
+                    <div class="row" style="margin-top: 30px;">
+                        <div class="col-xs-6 col-md-4"><img class="dish_pic" src="{{ url_for('static', filename = 'pictures/dishes/dish1.jpg') }}"></div>
+                        <div class="col-xs-6 col-md-4"><img class="dish_pic" src="{{ url_for('static', filename = 'pictures/dishes/dish1.jpg') }}" align="center"></div>
+                        <div class="col-xs-6 col-md-4"><img class="dish_pic" src="{{ url_for('static', filename = 'pictures/dishes/dish1.jpg') }}" align="center"></div>
+                    </div>
+                    <div class="row" style="margin-top: 30px;">
+                        <div class="col-xs-6 col-md-4"><img class="dish_pic" src="{{ url_for('static', filename = 'pictures/dishes/dish1.jpg') }}"></div>
+                        <div class="col-xs-6 col-md-4"><img class="dish_pic" src="{{ url_for('static', filename = 'pictures/dishes/dish1.jpg') }}" align="center"></div>
+                        <div class="col-xs-6 col-md-4"><img class="dish_pic" src="{{ url_for('static', filename = 'pictures/dishes/dish1.jpg') }}" align="center"></div>
+                    </div>
+                    <div class="row" style="margin-top: 30px;">
+                        <div class="col-xs-6 col-md-4"><img class="dish_pic" src="{{ url_for('static', filename = 'pictures/dishes/dish1.jpg') }}"></div>
+                        <div class="col-xs-6 col-md-4"><img class="dish_pic" src="{{ url_for('static', filename = 'pictures/dishes/dish1.jpg') }}" align="center"></div>
+                        <div class="col-xs-6 col-md-4"><img class="dish_pic" src="{{ url_for('static', filename = 'pictures/dishes/dish1.jpg') }}" align="center"></div>
+                    </div>
+                    <div class="row" style="margin-top: 30px;">
+                        <div class="col-xs-6 col-md-4"><img class="dish_pic" src="{{ url_for('static', filename = 'pictures/dishes/dish1.jpg') }}"></div>
+                        <div class="col-xs-6 col-md-4"><img class="dish_pic" src="{{ url_for('static', filename = 'pictures/dishes/dish1.jpg') }}" align="center"></div>
+                        <div class="col-xs-6 col-md-4"><img class="dish_pic" src="{{ url_for('static', filename = 'pictures/dishes/dish1.jpg') }}" align="center"></div>
+                    </div>
+                    <div class="row" style="margin-top: 30px;">
+                        <div class="col-xs-6 col-md-4"><img class="dish_pic" src="{{ url_for('static', filename = 'pictures/dishes/dish1.jpg') }}"></div>
+                        <div class="col-xs-6 col-md-4"><img class="dish_pic" src="{{ url_for('static', filename = 'pictures/dishes/dish1.jpg') }}" align="center"></div>
+                        <div class="col-xs-6 col-md-4"><img class="dish_pic" src="{{ url_for('static', filename = 'pictures/dishes/dish1.jpg') }}" align="center"></div>
+                    </div>
+                    <div class="row" style="margin-top: 30px;">
+                        <div class="col-xs-6 col-md-4"><img class="dish_pic" src="{{ url_for('static', filename = 'pictures/dishes/dish1.jpg') }}"></div>
+                        <div class="col-xs-6 col-md-4"><img class="dish_pic" src="{{ url_for('static', filename = 'pictures/dishes/dish1.jpg') }}" align="center"></div>
+                        <div class="col-xs-6 col-md-4"><img class="dish_pic" src="{{ url_for('static', filename = 'pictures/dishes/dish1.jpg') }}" align="center"></div>
+                    </div>
+                    <div class="row" style="margin-top: 30px;">
+                        <div class="col-xs-6 col-md-4"><img class="dish_pic" src="{{ url_for('static', filename = 'pictures/dishes/dish1.jpg') }}"></div>
+                        <div class="col-xs-6 col-md-4"><img class="dish_pic" src="{{ url_for('static', filename = 'pictures/dishes/dish1.jpg') }}" align="center"></div>
+                        <div class="col-xs-6 col-md-4"><img class="dish_pic" src="{{ url_for('static', filename = 'pictures/dishes/dish1.jpg') }}" align="center"></div>
+                    </div>
+                </section>
+                <section id="duncai">
+                    <div class="page-header">
+                        <h1>炖菜</h1>
+                    </div>
+                    <div class="row" style="margin-top: 30px;">
+                        <div class="col-xs-6 col-md-4"><img class="dish_pic" src="{{ url_for('static', filename = 'pictures/dishes/dish1.jpg') }}"></div>
+                        <div class="col-xs-6 col-md-4"><img class="dish_pic" src="{{ url_for('static', filename = 'pictures/dishes/dish1.jpg') }}" align="center"></div>
+                        <div class="col-xs-6 col-md-4"><img class="dish_pic" src="{{ url_for('static', filename = 'pictures/dishes/dish1.jpg') }}" align="center"></div>
+                    </div>
+                </section>
+                <section id="xican">
+                    <div class="page-header">
+                        <h1>西餐</h1>
+                    </div>
+                    <div class="row" style="margin-top: 30px;">
+                        <div class="col-xs-6 col-md-4"><img class="dish_pic" src="{{ url_for('static', filename = 'pictures/dishes/dish1.jpg') }}"></div>
+                        <div class="col-xs-6 col-md-4"><img class="dish_pic" src="{{ url_for('static', filename = 'pictures/dishes/dish1.jpg') }}" align="center"></div>
+                        <div class="col-xs-6 col-md-4"><img class="dish_pic" src="{{ url_for('static', filename = 'pictures/dishes/dish1.jpg') }}" align="center"></div>
+                    </div>
+                </section>
+                <section id="liangcai">
+                    <div class="page-header">
+                        <h1>凉菜</h1>
+                    </div>
+                    <div class="row" style="margin-top: 30px;">
+                        <div class="col-xs-6 col-md-4"><img class="dish_pic" src="{{ url_for('static', filename = 'pictures/dishes/dish1.jpg') }}"></div>
+                        <div class="col-xs-6 col-md-4"><img class="dish_pic" src="{{ url_for('static', filename = 'pictures/dishes/dish1.jpg') }}" align="center"></div>
+                        <div class="col-xs-6 col-md-4"><img class="dish_pic" src="{{ url_for('static', filename = 'pictures/dishes/dish1.jpg') }}" align="center"></div>
+                    </div>
+                </section>
+                <section id="jiulei">
+                    <div class="page-header">
+                        <h1>酒类</h1>
+                    </div>
+                    <div class="row" style="margin-top: 30px;">
+                        <div class="col-xs-6 col-md-4"><img class="dish_pic" src="{{ url_for('static', filename = 'pictures/dishes/dish1.jpg') }}"></div>
+                        <div class="col-xs-6 col-md-4"><img class="dish_pic" src="{{ url_for('static', filename = 'pictures/dishes/dish1.jpg') }}" align="center"></div>
+                        <div class="col-xs-6 col-md-4"><img class="dish_pic" src="{{ url_for('static', filename = 'pictures/dishes/dish1.jpg') }}" align="center"></div>
+                    </div>
+                </section>
+                <section id="yinliao">
+                    <div class="page-header">
+                        <h1>饮料</h1>
+                    </div>
+                    <div class="row" style="margin-top: 30px;">
+                        <div class="col-xs-6 col-md-4"><img class="dish_pic" src="{{ url_for('static', filename = 'pictures/dishes/dish1.jpg') }}"></div>
+                        <div class="col-xs-6 col-md-4"><img class="dish_pic" src="{{ url_for('static', filename = 'pictures/dishes/dish1.jpg') }}" align="center"></div>
+                        <div class="col-xs-6 col-md-4"><img class="dish_pic" src="{{ url_for('static', filename = 'pictures/dishes/dish1.jpg') }}" align="center"></div>
+                    </div>
+                </section>
+                <section id="shui">
+                    <div class="page-header">
+                        <h1>水</h1>
+                    </div>
+                    <div class="row" style="margin-top: 30px;">
+                        <div class="col-xs-6 col-md-4"><img class="dish_pic" src="{{ url_for('static', filename = 'pictures/dishes/dish1.jpg') }}"></div>
+                        <div class="col-xs-6 col-md-4"><img class="dish_pic" src="{{ url_for('static', filename = 'pictures/dishes/dish1.jpg') }}" align="center"></div>
+                        <div class="col-xs-6 col-md-4"><img class="dish_pic" src="{{ url_for('static', filename = 'pictures/dishes/dish1.jpg') }}" align="center"></div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock%}
