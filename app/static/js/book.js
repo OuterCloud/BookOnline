@@ -6,3 +6,11 @@ function ResizeImage(ThisPic,RePicWidth){
     ThisPic.width = RePicWidth;  //图片显示的可视宽度
     ThisPic.height = TrueHeight / Multiple;  //图片显示的可视高度
 }
+$(function (){
+    $('ul li').click(function (){
+        //把之前已有的active去掉
+        $('.active').removeClass('active');
+        //当前点击的li加上class
+        $(this).addClass("active");
+    });
+})

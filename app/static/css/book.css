@@ -2,3 +2,12 @@
 	width: 200px;
 	height: 200px
 }
+.dish_row_list{
+	margin-top: 30px;
+}
+.dish_row_ele{
+	text-align: center;
+}
+.dish_row_list p{
+	margin-top: 15px;
+}
