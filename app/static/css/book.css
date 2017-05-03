@@ -7,7 +7,24 @@
 }
 .dish_row_ele{
 	text-align: center;
+	margin-top: 30px;
 }
 .dish_row_list p{
 	margin-top: 15px;
+}
+.amount{
+	text-align: center;
+}
+.input_group_div{
+	margin: 0 auto;
+}
+.book_button{
+	margin-top: 50px;
+	background-color: #48D1CC;
+}
+a:hover{
+	cursor: pointer;
+}
+#modalBody{
+	text-align: center;
 }

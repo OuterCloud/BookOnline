@@ -29,13 +29,19 @@ def book():
 		for root_path,dir_names,file_names in os.walk(dishes_dir_path):  
 			for file_name in file_names:
 				dish={}
-				dish["dish_name"] = file_name
+				dish["dish_name"] = file_name[0:len(file_name)-4]
 				dish_root = os.path.basename(root_path)
 				seq = ("pictures","dishes",dish_root,file_name)
 				dish["dish_path"] = "/".join(seq)
 				dish["dish_cate"] = dish_root
 				dishes.append(dish)
 		return render_template("/book.html",dishes=dishes)
+
+@app.route("/calc",methods=["POST"])
+def calc():
+	if request.method == "POST":
+		book_str = request.form.get("book_str")
+		return book_str
 
 @app.route("/favor",methods=["GET"])
 def favor():
