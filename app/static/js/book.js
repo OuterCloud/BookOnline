@@ -21,6 +21,13 @@ $(function (){
         }
     });
 })
+//激活左侧导航栏
+$(function(){
+	$("li").click(function(){
+		$("li").removeClass("active");
+		$(this).addClass("active");
+	});
+});
 //显示账单
 function book(){
 	var book_str = "";
