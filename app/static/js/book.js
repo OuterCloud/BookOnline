@@ -21,6 +21,7 @@ $(function (){
         }
     });
 })
+//显示账单
 function book(){
 	var book_str = "";
 	var dish_info = "";
@@ -36,23 +37,38 @@ function book(){
 			price = price+parseInt(dish_price)*parseInt(dish_amount);
 		}
 	});
-	dish_info = dish_info+"<br>"+"本账单共需支付："+price+"元"
 	if (book_str == "") {
+		document.getElementById("modalFooter").innerHTML = "<button type='button' onclick='refresh()' class='btn btn-default' data-dismiss='modal'>关闭</button>";
 		document.getElementById("modalBody").innerHTML = "您还没点餐";
-		$('#myModal').modal('show');
 	}else{
+		document.getElementById("modalFooter").innerHTML = "<button type=\"button\" onclick=\"save_bill()\" class=\"btn btn-default\">保存账单</button>";
+		dish_info = dish_info+"<br>"+"本账单共需支付："+price+"元<br><br>";
+		dish_info += "<input type=\"text\" id=\"customer_info\" class=\"form-control\" placeholder=\"请输入顾客信息（例如：位置、姓名、电话等）\">"
 		document.getElementById("modalBody").innerHTML = dish_info;
-		$('#myModal').modal('show');
-		var data = {"book_str":book_str};
-		var price = 0;
-		$.ajax({
-			async : false,
-			type: "POST",
-			url: "/calc",
-			data: data,
-			success: function(data){
-				
-			}
-		});
 	}
+}
+//保存账单
+function save_bill(){
+	var bill_info = document.getElementById("modalBody").innerHTML;
+	var customer_info = $("#customer_info").val();
+	var data = {
+		"bill_info":bill_info,
+		"customer_info":customer_info
+	};	
+	$.ajax({
+		async : false,
+		type: "POST",
+		url: "/save",
+		data: data,
+		success: function(data){
+			if (data == "OK") {
+				document.getElementById("myModalLabel").innerHTML = "账单已保存";
+				document.getElementById("modalFooter").innerHTML = "<button type='button' onclick='refresh()' class='btn btn-default' data-dismiss='modal'>关闭</button>";
+			}
+		}
+	});
+}
+//刷新页面
+function refresh(){
+	window.location.reload();
 }

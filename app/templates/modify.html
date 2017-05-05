@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block refer %}
+    {{ super() }}
+    <!--block后面起名字要注意，这里叫refer，叫什么别叫head，否则以下文件加载不进来-->
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/docs.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/modify.css') }}">
+    <script src="{{ url_for('static', filename = 'js/modify.js') }}"></script>
+{% endblock %}
+{% block theBody %}
+<body style="margin-top: 50px; padding-bottom: 200px;">
+{% if sig == "ok" %}
+<div class="container">
+	<div class="table-responsive">
+		<table class="table">
+			<caption>今日账单</caption>
+			<thead>
+				<tr>
+					<th>账单</th>
+					<th>操作账单</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for bill in bills %}
+					{% if bill != "\n" %}
+					<tr>
+						<td>
+							<div>
+							{% set lines = bill.split("\n") %}
+							{% for line in lines %}
+								{{line}}<br>
+							{% endfor %}
+							</div>
+						</td>
+						<td>
+							<button class="btn btn-danger">修改</button>
+						</td>
+					</tr>
+					{% endif %}
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
+{% elif sig == "null" %}
+<div class="container">
+	<div class="panel panel-default">
+	    <div class="panel-body">
+	        今日还没开张~
+	    </div>
+	</div>
+</div>
+{% endif %}
+</body>
+<!-- 账单模态框（Modal） -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    请注意
+                </h4>
+            </div>
+            <div class="modal-body" id="modalBody">
+            	保存成功！
+            </div>
+            <div class="modal-footer" id="modalFooter">
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!--保存修改信息区域-->
+<div id="modify_share" style="display:none;"></div> 
+{% endblock%}
