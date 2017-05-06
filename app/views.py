@@ -6,6 +6,7 @@ from bs4 import BeautifulSoup
 import os,time,re,operator
 
 app_dir_path = os.path.dirname(__file__)
+data_path = os.path.join(app_dir_path,"data")
 
 #获取菜品文件夹下所有的菜品
 def get_dishes():
@@ -21,6 +22,15 @@ def get_dishes():
 			dish["dish_cate"] = dish_root
 			dishes.append(dish)
 	return dishes
+
+def calc_turnover(file_path):
+	turnover = 0
+	with open(file_path,"r") as f:
+		f_lines = f.readlines()
+		for line in f_lines:
+			if ("元" in line.strip()) and ("份" in line.strip()) and ("共" in line.strip()):
+				turnover += int(re.search("共：[0-9]*元",line).group(0).strip("共：").strip("元"))
+	return turnover
 
 @app.errorhandler(404)
 def page_not_found(e):
@@ -127,7 +137,6 @@ def save_modification():
 def favor():
 	if request.method == "GET":
 		sort_by = request.args.get("sortBy")
-		data_path = os.path.join(app_dir_path,"data")
 		current_year_month = time.strftime('%Y-%m',time.localtime(time.time()))
 		current_year = current_year_month.split("-")[0]
 		current_month = current_year_month.split("-")[1]
@@ -258,5 +267,44 @@ def favor():
 @app.route("/calc",methods=["GET"])
 def calc():
 	if request.method == "GET":
-		calc_by = request.args.get("by")
-		return render_template("/statement.html")
+		calc_by = request.args.get("calcBy")
+		if calc_by == "all":
+			desc = "累计营业额统计"
+			turnover = 0
+			for root_path,dir_names,file_names in os.walk(data_path):
+				for file_name in file_names:
+					file_path = os.path.join(root_path,file_name)
+					turnover += calc_turnover(file_path)
+			return render_template("/statement.html",by_all="active",desc=desc,turnover=turnover)
+		if calc_by == "day":
+			desc = "日营业额统计"
+			turnover = 0
+			return render_template("/statement.html",by_day="active",desc=desc,turnover=turnover)
+		if calc_by == "month":
+			desc = "月营业额统计"
+			turnover = 0
+			return render_template("/statement.html",by_month="active",desc=desc,turnover=turnover)
+		if calc_by == "season":
+			desc = "季度营业额统计"
+			turnover = 0
+			return render_template("/statement.html",by_season="active",desc=desc,turnover=turnover)
+		if calc_by == "year":
+			desc = "年度营业额统计"
+			turnover = 0
+			return render_template("/statement.html",by_year="active",desc=desc,turnover=turnover)
+		if calc_by == "custom":
+			desc = "自定义时间范围内营业额统计"
+			turnover = 0
+			return render_template("/statement.html",by_custom="active",desc=desc,turnover=turnover)
+
+@app.route("/calc_by_day",methods=["GET"])
+def calc_by_day():
+	if request.method == "GET":
+		the_date = request.args.get("date")
+		turnover = 0
+		for root_path,dir_names,file_names in os.walk(data_path):
+			for file_name in file_names:
+				if the_date in file_name:
+					file_path = os.path.join(root_path,file_name)
+					turnover += calc_turnover(file_path)
+		return str(turnover)

@@ -1,7 +1,7 @@
 <html>
 	<head style="margin-top: 50px">
 		<meta charset="utf-8">
-		<title>OCB在线点餐平台</title>
+		<title>OCB餐饮管理平台</title>
 		<!--BootStrap-->
 		<link rel="stylesheet" href="{{ url_for('static', filename = 'bootstrap/bootstrap.min.css') }}">
 		<!--BootStrap-->
@@ -15,14 +15,14 @@
 	<nav class="navbar-inverse navbar-fixed-top" role="navigation">
 		<div class="container-fluid">
 	    <div class="navbar-header">
-	        <a class="navbar-brand" href="{{ url_for('index') }}">OCB在线点餐系统</a>
+	        <a class="navbar-brand" href="{{ url_for('index') }}">OCB餐饮管理系统</a>
 	    </div>
 	    <div>
 	        <ul class="nav navbar-nav">
 	            <li><a href="{{ url_for('book') }}">点餐</a></li>
 	            <li><a href="{{ url_for('modify') }}">改单</a></li>
 	            <li><a href="/favor?sortBy=all">销量</a></li>
-	            <li><a href="/calc">营业额</a></li>
+	            <li><a href="/calc?calcBy=all">营业额</a></li>
 	        </ul>
 	    </div>
 		</div>
