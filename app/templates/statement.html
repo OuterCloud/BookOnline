@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block refer %}
+    {{ super() }}
+    <!--block后面起名字要注意，这里叫refer，叫什么别叫head，否则以下文件加载不进来-->
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/docs.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/statement.css') }}">
+    <script src="{{ url_for('static', filename = 'js/statement.js') }}"></script>
+{% endblock %}
+{% block theBody %}
+<body style="margin-top: 50px; padding-bottom: 200px;">
+	
+</body>
+{% endblock%}

@@ -9,51 +9,61 @@
 {% block theBody %}
 <body style="margin-top: 50px; padding-bottom: 200px;">
 	<div class="container">
-		<div class="row">
-        	{% if all_active == "active" %}
-			<div class="table-responsive">
-				<table class="table">
-					<caption>畅销排行榜</caption>
-					<thead>
-						<tr>
-							<th>排名</th>
-							<th>商品名称</th>
-							<th>销售量</th>
-							<th>类别</th>
-						</tr>
-					</thead>
-					<tbody>
-						{% if all_sales_sorted %}
-						{% for sale in all_sales_sorted %}
-						<tr>
-							<td>{{loop.index}}</td>
-							<td>{{sale.dish_name}}</td>
-							<td>{{sale.sales_volumn}}</td>
-							{% if sale.dish_cate == "chaocai" %}
-							<td>炒菜</td>
-							{% elif sale.dish_cate == "duncai" %}
-							<td>炖菜</td>
-							{% elif sale.dish_cate == "xican" %}
-							<td>西餐</td>
-							{% elif sale.dish_cate == "liangcai" %}
-							<td>凉菜</td>
-							{% elif sale.dish_cate == "zhushi" %}
-							<td>主食</td>
-							{% elif sale.dish_cate == "jiulei" %}
-							<td>酒类</td>
-							{% elif sale.dish_cate == "yinliao" %}
-							<td>饮料</td>
-							{% elif sale.dish_cate == "shui" %}
-							<td>水</td>
+		<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 bs-docs-sidebar" style="margin-top: 60px;">
+            <!--左侧导航栏-->
+            <ul class="nav nav-list bs-docs-sidenav affix">
+                <li class="{{by_all}}"><a href="/favor?sortBy=all">累计销量</a></li>
+                <li class="{{by_day}}"><a href="/favor?sortBy=day">本日销量</a></li>
+                <li class="{{by_month}}"><a href="/favor?sortBy=month">本月销量</a></li>
+                <li class="{{by_season}}"><a href="/favor?sortBy=season">本季销量</a></li>
+                <li class="{{by_year}}"><a href="/favor?sortBy=year">本年销量</a></li>
+            </ul>
+        </div>
+        <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
+			<div class="row">
+				<div class="table-responsive">
+					<table class="table">
+						<caption>{{desc}}畅销排行榜</caption>
+						<thead>
+							<tr>
+								<th>排名</th>
+								<th>商品名称</th>
+								<th>销售量</th>
+								<th>类别</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% if sales_sorted %}
+							{% for sale in sales_sorted %}
+							<tr>
+								<td>{{loop.index}}</td>
+								<td>{{sale.dish_name}}</td>
+								<td>{{sale.sales_volumn}}</td>
+								{% if sale.dish_cate == "chaocai" %}
+								<td>炒菜</td>
+								{% elif sale.dish_cate == "duncai" %}
+								<td>炖菜</td>
+								{% elif sale.dish_cate == "xican" %}
+								<td>西餐</td>
+								{% elif sale.dish_cate == "liangcai" %}
+								<td>凉菜</td>
+								{% elif sale.dish_cate == "zhushi" %}
+								<td>主食</td>
+								{% elif sale.dish_cate == "jiulei" %}
+								<td>酒类</td>
+								{% elif sale.dish_cate == "yinliao" %}
+								<td>饮料</td>
+								{% elif sale.dish_cate == "shui" %}
+								<td>水</td>
+								{% endif %}
+							</tr>
+							{% endfor %}
 							{% endif %}
-						</tr>
-						{% endfor %}
-						{% endif %}
-					</tbody>
-				</table>
-			</div>
-			{% endif %}
-	    </div>
+						</tbody>
+					</table>
+				</div>
+		    </div>
+		</div>
 	</div>
 </body>
 {% endblock%}

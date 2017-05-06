@@ -126,41 +126,137 @@ def save_modification():
 @app.route("/favor",methods=["GET"])
 def favor():
 	if request.method == "GET":
-		sortBy = request.args.get("sortBy")
+		sort_by = request.args.get("sortBy")
 		data_path = os.path.join(app_dir_path,"data")
+		current_year_month = time.strftime('%Y-%m',time.localtime(time.time()))
+		current_year = current_year_month.split("-")[0]
+		current_month = current_year_month.split("-")[1]
+		current_day = time.strftime('%Y-%m-%d',time.localtime(time.time()))
 		dishes = []
 		for dish in get_dishes():
 			#增加销量键并赋初值为0
 			dish["sales_volumn"] = 0
 			dishes.append(dish)
-		for dish in dishes:
-			for root_path,dir_names,file_names in os.walk(data_path):
-				for file_name in file_names:
-					file_path = os.path.join(root_path,file_name)
-					#print(file_path)
-					with open(file_path,"r") as f:
-						f_content = f.read()
-						dish_sales = re.findall(dish["dish_name"]+".*份",f_content)
-						if dish_sales:
-							for dish_sale_info in dish_sales:
-								#print(dish_sale_info)
-								volumn = re.search("[0-9]*份",dish_sale_info)
-								if volumn:
-									volumn = int(volumn.group(0).replace("份",""))
-									dish["sales_volumn"] += volumn
-			#print(dish["dish_name"]+":"+str(dish["sales_volumn"])+"份")
-
-		if sortBy == "all":
+		if sort_by == "all":
+			desc = "累计销量 "
+			for dish in dishes:
+				for root_path,dir_names,file_names in os.walk(data_path):
+					for file_name in file_names:
+						file_path = os.path.join(root_path,file_name)
+						#print(file_path)
+						with open(file_path,"r") as f:
+							f_content = f.read()
+							dish_sales = re.findall(dish["dish_name"]+".*份",f_content)
+							if dish_sales:
+								for dish_sale_info in dish_sales:
+									#print(dish_sale_info)
+									volumn = re.search("[0-9]*份",dish_sale_info)
+									if volumn:
+										volumn = int(volumn.group(0).replace("份",""))
+										dish["sales_volumn"] += volumn
+				#print(dish["dish_name"]+":"+str(dish["sales_volumn"])+"份")
 			all_sales_sorted = sorted(dishes, key=operator.itemgetter("sales_volumn"), reverse=True)
-			all_active = "active"
-			return render_template("/favor.html",all_sales_sorted=all_sales_sorted,all_active=all_active)
-		elif sortBy == "cate":
-			cate_sales_sorted = sorted(dishes, key=operator.itemgetter("dish_cate"), reverse=True)
-			cate_active = "active"
-			return render_template("/favor.html",cate_active=cate_active,cate_sales_sorted=cate_sales_sorted)
-		elif sortBy == "solo":
-			solo_active = "active"
-			return render_template("/favor.html",solo_active=solo_active)
-		else:
-			all_active = "active"
-			return render_template("/favor.html",all_active=all_active)
+			return render_template("/favor.html",sales_sorted=all_sales_sorted,by_all="active",desc=desc)
+		if sort_by == "day":
+			desc = "本日 "+current_day+" "
+			#当日账单文件地址
+			file_name = time.strftime('%Y-%m-%d',time.localtime(time.time()))+"账单.txt"
+			file_path = os.path.join(app_dir_path,"data",file_name)
+			for dish in dishes:
+				with open(file_path,"r") as f:
+					f_content = f.read()
+					dish_sales = re.findall(dish["dish_name"]+".*份",f_content)
+					if dish_sales:
+						for dish_sale_info in dish_sales:
+							#print(dish_sale_info)
+							volumn = re.search("[0-9]*份",dish_sale_info)
+							if volumn:
+								volumn = int(volumn.group(0).replace("份",""))
+								dish["sales_volumn"] += volumn
+			day_sales_sorted = sorted(dishes, key=operator.itemgetter("sales_volumn"), reverse=True)
+			return render_template("/favor.html",sales_sorted=day_sales_sorted,by_day="active",desc=desc)
+		if sort_by == "month":
+			desc = "本月 "+current_year_month+" "
+			for dish in dishes:
+				for root_path,dir_names,file_names in os.walk(data_path):
+					for file_name in file_names:
+						if file_name.startswith(current_year_month):
+							file_path = os.path.join(root_path,file_name)
+							#print(file_path)
+							with open(file_path,"r") as f:
+								f_content = f.read()
+								dish_sales = re.findall(dish["dish_name"]+".*份",f_content)
+								if dish_sales:
+									for dish_sale_info in dish_sales:
+										#print(dish_sale_info)
+										volumn = re.search("[0-9]*份",dish_sale_info)
+										if volumn:
+											volumn = int(volumn.group(0).replace("份",""))
+											dish["sales_volumn"] += volumn
+			month_sales_sorted = sorted(dishes, key=operator.itemgetter("sales_volumn"), reverse=True)
+			return render_template("/favor.html",sales_sorted=month_sales_sorted,by_month="active",desc=desc)
+		if sort_by == "season":
+			current_year_spring = [current_year+"-03",current_year+"-04",current_year+"-05"]
+			current_year_summer = [current_year+"-06",current_year+"-07",current_year+"-08"]
+			current_year_autumn = [current_year+"-09",current_year+"-10",current_year+"-11"]
+			current_year_winter = [current_year+"-12",current_year+"-01",current_year+"-02"]
+			desc = ""
+			if current_year_month in current_year_spring:
+				desc = "本季 "+current_year+"春季 "
+				current_season = current_year_spring
+			if current_year_month in current_year_summer:
+				desc = "本季 "+current_year+"夏季 "
+				current_season = current_year_summer
+			if current_year_month in current_year_autumn:
+				desc = "本季 "+current_year+"秋季 "
+				current_season = current_year_autumn
+			if current_year_month in current_year_winter:
+				desc = "本季 "+current_year+"冬季 "
+				current_season = current_year_winter
+			for dish in dishes:
+				for root_path,dir_names,file_names in os.walk(data_path):
+					for file_name in file_names:
+						file_year_month = re.search("[0-9]*\-[0-9][0-9]",file_name).group(0)
+						#print(file_year_month)
+						file_path = os.path.join(root_path,file_name)
+						if file_year_month in current_season:
+							#print(file_path)
+							with open(file_path,"r") as f:
+								f_content = f.read()
+								dish_sales = re.findall(dish["dish_name"]+".*份",f_content)
+								if dish_sales:
+									for dish_sale_info in dish_sales:
+										#print(dish_sale_info)
+										volumn = re.search("[0-9]*份",dish_sale_info)
+										if volumn:
+											volumn = int(volumn.group(0).replace("份",""))
+											dish["sales_volumn"] += volumn
+			season_sales_sorted = sorted(dishes, key=operator.itemgetter("sales_volumn"), reverse=True)
+			return render_template("/favor.html",sales_sorted=season_sales_sorted,by_season="active",desc=desc)
+		if sort_by == "year":
+			desc = "本年 "+current_year+" "
+			for dish in dishes:
+				for root_path,dir_names,file_names in os.walk(data_path):
+					for file_name in file_names:
+						file_year = re.search("[0-9]*\-",file_name).group(0).strip("-")
+						if file_year == current_year:
+							file_path = os.path.join(root_path,file_name)
+							#print(file_path)
+							with open(file_path,"r") as f:
+								f_content = f.read()
+								dish_sales = re.findall(dish["dish_name"]+".*份",f_content)
+								if dish_sales:
+									for dish_sale_info in dish_sales:
+										#print(dish_sale_info)
+										volumn = re.search("[0-9]*份",dish_sale_info)
+										if volumn:
+											volumn = int(volumn.group(0).replace("份",""))
+											dish["sales_volumn"] += volumn
+			year_sales_sorted = sorted(dishes, key=operator.itemgetter("sales_volumn"), reverse=True)
+			return render_template("/favor.html",sales_sorted=year_sales_sorted,by_year="active",desc=desc)
+
+@app.route("/calc",methods=["GET"])
+def calc():
+	if request.method == "GET":
+		calc_by = request.args.get("by")
+		return render_template("/statement.html")
