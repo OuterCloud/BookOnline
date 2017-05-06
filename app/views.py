@@ -308,3 +308,53 @@ def calc_by_day():
 					file_path = os.path.join(root_path,file_name)
 					turnover += calc_turnover(file_path)
 		return str(turnover)
+
+@app.route("/calc_by_month",methods=["GET"])
+def calc_by_month():
+	if request.method == "GET":
+		the_month = request.args.get("month")
+		print(the_month)
+		turnover = 0
+		for root_path,dir_names,file_names in os.walk(data_path):
+			for file_name in file_names:
+				if the_month in file_name:
+					file_path = os.path.join(root_path,file_name)
+					turnover += calc_turnover(file_path)
+		return str(turnover)
+
+@app.route("/calc_by_year",methods=["GET"])
+def calc_by_year():
+	if request.method == "GET":
+		the_year = request.args.get("year")
+		print(the_year)
+		turnover = 0
+		for root_path,dir_names,file_names in os.walk(data_path):
+			for file_name in file_names:
+				if the_year in file_name:
+					file_path = os.path.join(root_path,file_name)
+					turnover += calc_turnover(file_path)
+		return str(turnover)
+
+@app.route("/calc_by_season",methods=["GET"])
+def calc_by_season():
+	if request.method == "GET":
+		the_season = request.args.get("season")
+		the_year = request.args.get("year")
+		the_months = []
+		if the_season == "春季":
+			the_months = [the_year+"-03",the_year+"-04",the_year+"-05"]
+		if the_season == "夏季":
+			the_months = [the_year+"-06",the_year+"-07",the_year+"-08"]
+		if the_season == "秋季":
+			the_months = [the_year+"-09",the_year+"-10",the_year+"-11"]
+		if the_season == "冬季":
+			the_months = [the_year+"-12",the_year+"-01",the_year+"-02"]
+		turnover = 0
+		for root_path,dir_names,file_names in os.walk(data_path):
+			for file_name in file_names:
+				for the_month in the_months:
+					if the_month in file_name:
+						print(the_month)
+						file_path = os.path.join(root_path,file_name)
+						turnover += calc_turnover(file_path)
+		return str(turnover)
