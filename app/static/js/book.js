@@ -40,7 +40,7 @@ function book(){
 			var dish_name = $(this).parent().parent().find('p').html().split(" ")[0];
 			var dish_price = $(this).parent().parent().find('p').html().split(" ")[1];
 			book_str = book_str+dish_name+"&"+dish_price+"&"+dish_amount+"&&";
-			dish_info = dish_info+dish_name+" "+dish_price+" "+dish_amount+"份 "+"共："+parseInt(dish_price)*parseInt(dish_amount)+"元<br>";
+			dish_info = dish_info+dish_name+" 单价："+dish_price+" "+"份数："+dish_amount+"份 "+"共："+parseInt(dish_price)*parseInt(dish_amount)+"元<br>";
 			price = price+parseInt(dish_price)*parseInt(dish_amount);
 		}
 	});

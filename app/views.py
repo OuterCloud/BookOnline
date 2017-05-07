@@ -152,18 +152,20 @@ def favor():
 			for dish in dishes:
 				for root_path,dir_names,file_names in os.walk(data_path):
 					for file_name in file_names:
-						file_path = os.path.join(root_path,file_name)
-						#print(file_path)
-						with open(file_path,"r") as f:
-							f_content = f.read()
-							dish_sales = re.findall(dish["dish_name"]+".*份",f_content)
-							if dish_sales:
-								for dish_sale_info in dish_sales:
-									#print(dish_sale_info)
-									volumn = re.search("[0-9]*份",dish_sale_info)
-									if volumn:
-										volumn = int(volumn.group(0).replace("份",""))
-										dish["sales_volumn"] += volumn
+						if re.match("[0-9]*-[0-9][0-9]-[0-9][0-9].*",file_name):
+							file_path = os.path.join(root_path,file_name)
+							#print(file_path)
+							with open(file_path,"r") as f:
+								f_content = f.read()
+								dish_sales = re.findall(dish["dish_name"].split(" ")[0]+".*份",f_content)
+								if dish_sales:
+									for dish_sale_info in dish_sales:
+										print(dish_sale_info)
+										volumn = re.search("份数：[0-9]*份",dish_sale_info)
+										if volumn:
+											rep_volumn = volumn.group(0).replace("份","")
+											volumn = int(rep_volumn[2:len(rep_volumn)])
+											dish["sales_volumn"] += volumn
 				#print(dish["dish_name"]+":"+str(dish["sales_volumn"])+"份")
 			all_sales_sorted = sorted(dishes, key=operator.itemgetter("sales_volumn"), reverse=True)
 			return render_template("/favor.html",sales_sorted=all_sales_sorted,by_all="active",desc=desc)
@@ -172,17 +174,19 @@ def favor():
 			#当日账单文件地址
 			file_name = time.strftime('%Y-%m-%d',time.localtime(time.time()))+"账单.txt"
 			file_path = os.path.join(app_dir_path,"data",file_name)
-			for dish in dishes:
-				with open(file_path,"r") as f:
-					f_content = f.read()
-					dish_sales = re.findall(dish["dish_name"]+".*份",f_content)
-					if dish_sales:
-						for dish_sale_info in dish_sales:
-							#print(dish_sale_info)
-							volumn = re.search("[0-9]*份",dish_sale_info)
-							if volumn:
-								volumn = int(volumn.group(0).replace("份",""))
-								dish["sales_volumn"] += volumn
+			if os.path.exists(file_path):
+				for dish in dishes:
+					with open(file_path,"r") as f:
+						f_content = f.read()
+						dish_sales = re.findall(dish["dish_name"].split(" ")[0]+".*份",f_content)
+						if dish_sales:
+							for dish_sale_info in dish_sales:
+								#print(dish_sale_info)
+								volumn = re.search("份数：[0-9]*份",dish_sale_info)
+								if volumn:
+									rep_volumn = volumn.group(0).replace("份","")
+									volumn = int(rep_volumn[2:len(rep_volumn)])
+									dish["sales_volumn"] += volumn
 			day_sales_sorted = sorted(dishes, key=operator.itemgetter("sales_volumn"), reverse=True)
 			return render_template("/favor.html",sales_sorted=day_sales_sorted,by_day="active",desc=desc)
 		if sort_by == "month":
@@ -195,13 +199,14 @@ def favor():
 							#print(file_path)
 							with open(file_path,"r") as f:
 								f_content = f.read()
-								dish_sales = re.findall(dish["dish_name"]+".*份",f_content)
+								dish_sales = re.findall(dish["dish_name"].split(" ")[0]+".*份",f_content)
 								if dish_sales:
 									for dish_sale_info in dish_sales:
 										#print(dish_sale_info)
-										volumn = re.search("[0-9]*份",dish_sale_info)
+										volumn = re.search("份数：[0-9]*份",dish_sale_info)
 										if volumn:
-											volumn = int(volumn.group(0).replace("份",""))
+											rep_volumn = volumn.group(0).replace("份","")
+											volumn = int(rep_volumn[2:len(rep_volumn)])
 											dish["sales_volumn"] += volumn
 			month_sales_sorted = sorted(dishes, key=operator.itemgetter("sales_volumn"), reverse=True)
 			return render_template("/favor.html",sales_sorted=month_sales_sorted,by_month="active",desc=desc)
@@ -226,21 +231,23 @@ def favor():
 			for dish in dishes:
 				for root_path,dir_names,file_names in os.walk(data_path):
 					for file_name in file_names:
-						file_year_month = re.search("[0-9]*\-[0-9][0-9]",file_name).group(0)
-						#print(file_year_month)
-						file_path = os.path.join(root_path,file_name)
-						if file_year_month in current_season:
-							#print(file_path)
-							with open(file_path,"r") as f:
-								f_content = f.read()
-								dish_sales = re.findall(dish["dish_name"]+".*份",f_content)
-								if dish_sales:
-									for dish_sale_info in dish_sales:
-										#print(dish_sale_info)
-										volumn = re.search("[0-9]*份",dish_sale_info)
-										if volumn:
-											volumn = int(volumn.group(0).replace("份",""))
-											dish["sales_volumn"] += volumn
+						if re.match("[0-9]*-[0-9][0-9]-[0-9][0-9].*",file_name):
+							file_year_month = re.search("[0-9]*\-[0-9][0-9]",file_name).group(0)
+							#print(file_year_month)
+							file_path = os.path.join(root_path,file_name)
+							if file_year_month in current_season:
+								#print(file_path)
+								with open(file_path,"r") as f:
+									f_content = f.read()
+									dish_sales = re.findall(dish["dish_name"].split(" ")[0]+".*份",f_content)
+									if dish_sales:
+										for dish_sale_info in dish_sales:
+											#print(dish_sale_info)
+											volumn = re.search("份数：[0-9]*份",dish_sale_info)
+											if volumn:
+												rep_volumn = volumn.group(0).replace("份","")
+												volumn = int(rep_volumn[2:len(rep_volumn)])
+												dish["sales_volumn"] += volumn
 			season_sales_sorted = sorted(dishes, key=operator.itemgetter("sales_volumn"), reverse=True)
 			return render_template("/favor.html",sales_sorted=season_sales_sorted,by_season="active",desc=desc)
 		if sort_by == "year":
@@ -248,20 +255,22 @@ def favor():
 			for dish in dishes:
 				for root_path,dir_names,file_names in os.walk(data_path):
 					for file_name in file_names:
-						file_year = re.search("[0-9]*\-",file_name).group(0).strip("-")
-						if file_year == current_year:
-							file_path = os.path.join(root_path,file_name)
-							#print(file_path)
-							with open(file_path,"r") as f:
-								f_content = f.read()
-								dish_sales = re.findall(dish["dish_name"]+".*份",f_content)
-								if dish_sales:
-									for dish_sale_info in dish_sales:
-										#print(dish_sale_info)
-										volumn = re.search("[0-9]*份",dish_sale_info)
-										if volumn:
-											volumn = int(volumn.group(0).replace("份",""))
-											dish["sales_volumn"] += volumn
+						if re.match("[0-9]*-[0-9][0-9]-[0-9][0-9].*",file_name):
+							file_year = re.search("[0-9]*\-",file_name).group(0).strip("-")
+							if file_year == current_year:
+								file_path = os.path.join(root_path,file_name)
+								#print(file_path)
+								with open(file_path,"r") as f:
+									f_content = f.read()
+									dish_sales = re.findall(dish["dish_name"].split(" ")[0]+".*份",f_content)
+									if dish_sales:
+										for dish_sale_info in dish_sales:
+											#print(dish_sale_info)
+											volumn = re.search("份数：[0-9]*份",dish_sale_info)
+											if volumn:
+												rep_volumn = volumn.group(0).replace("份","")
+												volumn = int(rep_volumn[2:len(rep_volumn)])
+												dish["sales_volumn"] += volumn
 			year_sales_sorted = sorted(dishes, key=operator.itemgetter("sales_volumn"), reverse=True)
 			return render_template("/favor.html",sales_sorted=year_sales_sorted,by_year="active",desc=desc)
 
