@@ -98,12 +98,17 @@
                     <span class="input-group-addon">开始日期</span>
                     <input type="text" id="datetimeStart" class="form-control form_datetime" placeholder="请选择开始日期" readonly>
                 </div>
+                <br>
+                营业额：<span id="custom_turnover">{{ turnover|string }}</span> 元
             </div>
             <div style="margin-left: 10px" class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                 <div class="input-group input-group-sm">
                     <span class="input-group-addon">结束日期</span>
                     <input type="text" id="datetimeEnd" class="form-control form_datetime" placeholder="请选择结束日期" readonly>
                 </div>
+            </div>
+            <div>
+                <button type="button" style="height: 30px" onclick="calc_by_custom()" class="btn btn-info">统计</button>
             </div>
             {% endif %}
 		</div>

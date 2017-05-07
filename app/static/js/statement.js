@@ -12,8 +12,7 @@ $(function(){
 		format: 'yyyy-mm-dd',
 		minView:'month',
 		language: 'zh-CN',
-		autoclose:true,
-		startDate:new Date()
+		autoclose:true
 	}).on("click",function(){
 		$("#datetimeStart").datetimepicker("setEndDate",$("#datetimeEnd").val());
 	});
@@ -22,8 +21,7 @@ $(function(){
 		format: 'yyyy-mm-dd',
 		minView:'month',
 		language: 'zh-CN',
-		autoclose:true,
-		startDate:new Date()
+		autoclose:true
 	}).on("click",function(){
 		$("#datetimeEnd").datetimepicker("setStartDate",$("#datetimeStart".val()));
 	});
@@ -154,6 +152,29 @@ function calc_by_season(){
 			data: data,
 			success: function(data){
 				$("#season_turnover").html(data);
+			}
+		});
+	}
+}
+//按自定义时间范围统计营业额
+function calc_by_custom(){
+	var datetimeStart = $("#datetimeStart").val();
+	var datetimeEnd = $("#datetimeEnd").val();
+	if (datetimeStart == "" || datetimeEnd == "") {
+		$("#myModal").modal("show");
+		setTimeout(function(){$("#myModal").modal("hide")},800);
+	} else {
+		data = {
+			"start_date": datetimeStart,
+			"end_date": datetimeEnd
+		}
+		$.ajax({
+			async : false,
+			type: "GET",
+			url: "/calc_by_custom",
+			data: data,
+			success: function(data){
+				$("#custom_turnover").html(data);
 			}
 		});
 	}

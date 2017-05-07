@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 from flask import render_template,request,jsonify
 from app import app
-import requests,os,subprocess,time,webbrowser,platform
+import requests,os,subprocess,webbrowser,platform
 from bs4 import BeautifulSoup
 import os,time,re,operator
+from datetime import datetime
 
 app_dir_path = os.path.dirname(__file__)
 data_path = os.path.join(app_dir_path,"data")
@@ -357,4 +358,19 @@ def calc_by_season():
 						print(the_month)
 						file_path = os.path.join(root_path,file_name)
 						turnover += calc_turnover(file_path)
+		return str(turnover)
+
+@app.route("/calc_by_custom",methods=["GET"])
+def calc_by_custom():
+	if request.method == "GET":
+		start_date = datetime.strptime(request.args.get("start_date"), "%Y-%m-%d").date()
+		end_date = datetime.strptime(request.args.get("end_date"), "%Y-%m-%d").date()
+		turnover = 0
+		for root_path,dir_names,file_names in os.walk(data_path):
+			for file_name in file_names:
+				file_date_str = re.search("[0-9]*\-[0-9][0-9]-[0-9][0-9]",file_name).group(0)
+				file_date = datetime.strptime(file_date_str, "%Y-%m-%d").date()
+				if start_date<file_date<end_date:
+					file_path = os.path.join(root_path,file_name)
+					turnover += calc_turnover(file_path)
 		return str(turnover)
