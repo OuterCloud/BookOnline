@@ -8,6 +8,9 @@ from datetime import datetime
 
 app_dir_path = os.path.dirname(__file__)
 data_path = os.path.join(app_dir_path,"data")
+static_path = os.path.join(app_dir_path,"static")
+pictures_path = os.path.join(static_path,"pictures")
+dishes_path = os.path.join(pictures_path,"dishes")
 
 #获取菜品文件夹下所有的菜品
 def get_dishes():
@@ -101,7 +104,11 @@ def modify():
 				bills = content.split("——————————————————————————————")
 		else:
 			sig = "null"
-		return render_template("/modify.html",sig=sig,bills=bills)
+		dishes = []
+		for root_path,dir_names,file_names in os.walk(dishes_path):
+			for file_name in file_names:
+				dishes.append(file_name[0:len(file_name)-4])
+		return render_template("/modify.html",sig=sig,bills=bills,dishes=dishes)
 
 #保存对账单的修改
 @app.route("/save_modification",methods=["POST"])

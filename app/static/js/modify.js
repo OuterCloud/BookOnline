@@ -1,16 +1,37 @@
 //动态为页面新增的元素绑定click事件
 $(function(){
-    //修改账单
-    $("tbody").on("click",".btn-danger",function(){
-    	var old_bill_info = $(this).parent().parent().find("div").html();
-    	$("#modify_share").html(old_bill_info);
+	//修改账单
+	$("tbody").on("click",".btn-danger",function(){
+		var old_bill_info = $(this).parent().parent().find("div").html();
+		$("#modify_share").html(old_bill_info);
 		$(this).parent().parent().find("div").attr("contentEditable",true);
 		//自动聚焦
 		$(this).parent().parent().find("div").focus();
 		$(this).parent().html("<button class=\"btn btn-warning\">保存</button>");
 		//将其他修改按钮设置为disabled状态
-    	$('.btn-danger').attr('disabled',"true");
+		$('.btn-danger').attr('disabled',"true");
 	});
+	//加餐
+	$("tbody").on("click",".btn-primary",function(){
+		var old_bill_info = $(this).parent().parent().find("div").html();
+		$("#modify_share").html(old_bill_info);
+		//弹出加餐模态框
+		$("#addBillModal").modal("show");
+		//将其他修改按钮设置为disabled状态
+		$('.btn-danger').attr('disabled',"true");
+		//将其他加餐按钮设置为disabled状态
+		$('.btn-primary').attr('disabled',"true");
+	});
+	//保存加餐
+	$('#save_add_bill').click(function (){
+		//把加餐信息与old_bill_info合并并传到后台
+
+		
+        setTimeout(function(){$("#addBillModal").modal("hide")},100);
+        //还原按钮状态
+		$('.btn-danger').removeAttr("disabled");
+		$('.btn-primary').removeAttr("disabled");
+    });
 	//保存账单修改
 	$("tbody").on("click",".btn-warning",function(){
 		//获取账单内容的操作必须在页面动态新增元素之前，否则$(this)失效
@@ -82,3 +103,18 @@ $(function(){
 		});
 	});
 });
+//加减订单
+$(function (){
+    $('.glyphicon-plus-sign').click(function (){
+        var input_parent = $(this).parent().parent().parent();
+        var curr_amount = input_parent.find('input').attr("value");
+        input_parent.find('input').attr("value",parseInt(curr_amount)+1);
+    });
+    $('.glyphicon-minus-sign').click(function (){
+        var input_parent = $(this).parent().parent().parent();
+        var curr_amount = input_parent.find('input').attr("value");
+        if (parseInt(curr_amount) > 0) {
+        	input_parent.find('input').attr("value",parseInt(curr_amount)-1);
+        }
+    });
+})
