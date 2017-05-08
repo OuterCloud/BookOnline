@@ -3,7 +3,7 @@ from flask import render_template,request,jsonify
 from app import app
 import requests,os,subprocess,webbrowser,platform
 from bs4 import BeautifulSoup
-import os,time,re,operator
+import os,time,re,operator,json,urllib
 from datetime import datetime
 
 app_dir_path = os.path.dirname(__file__)
@@ -390,3 +390,12 @@ def calc_by_custom():
 					file_path = os.path.join(root_path,file_name)
 					turnover += calc_turnover(file_path)
 		return str(turnover)
+
+@app.route("/save_add_dishes",methods=["POST"])
+def save_add_dishes():
+	if request.method == "POST":
+		#data = request.get_data().decode()
+		#real_data = urllib.parse.unquote(data)
+		data = request.form
+		print(data)
+		return "ok"

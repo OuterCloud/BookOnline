@@ -1,3 +1,6 @@
 #modalBody{
 	text-align: center;
 }
+.glyphicon{
+	cursor: pointer;
+}

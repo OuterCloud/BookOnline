@@ -17,20 +17,40 @@ $(function(){
 		$("#modify_share").html(old_bill_info);
 		//弹出加餐模态框
 		$("#addBillModal").modal("show");
-		//将其他修改按钮设置为disabled状态
-		$('.btn-danger').attr('disabled',"true");
-		//将其他加餐按钮设置为disabled状态
-		$('.btn-primary').attr('disabled',"true");
 	});
 	//保存加餐
 	$('#save_add_bill').click(function (){
 		//把加餐信息与old_bill_info合并并传到后台
-
-		
-        setTimeout(function(){$("#addBillModal").modal("hide")},100);
-        //还原按钮状态
-		$('.btn-danger').removeAttr("disabled");
-		$('.btn-primary').removeAttr("disabled");
+		var add_dishes_info = new Array();
+		$(".amount").each(function(){
+    		if ($(this).val() != "0") {
+    			var add_dish_info = {}
+    			var add_volumn = $(this).val();
+    			var add_dish_name = $(this).prev("div").html();
+    			add_dish_info[add_dish_name] = add_volumn;
+    			add_dishes_info.push(add_dish_info);
+    		}
+  		});
+  		//将加餐信息传到后台
+  		data = {
+  			"add_dishes_info":add_dishes_info,
+  		}
+  		$.ajax({
+			async : false,
+			type: "POST",
+			url: "/save_add_dishes",
+			data: data,
+			success: function(data){
+				if (data == "ok") {
+					setTimeout(function(){$("#addBillModal").modal("hide")},100);
+			        //还原按钮状态
+					$('.btn-danger').removeAttr("disabled");
+					$('.btn-primary').removeAttr("disabled");
+					//初始化加餐单（刷新页面）
+					window.location.reload();
+				}
+			}
+		});
     });
 	//保存账单修改
 	$("tbody").on("click",".btn-warning",function(){
