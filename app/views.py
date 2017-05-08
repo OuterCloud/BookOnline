@@ -3,7 +3,7 @@ from flask import render_template,request,jsonify
 from app import app
 import requests,os,subprocess,webbrowser,platform
 from bs4 import BeautifulSoup
-import os,time,re,operator,json,urllib
+import os,time,re,operator,json,urllib,fileinput
 from datetime import datetime
 
 app_dir_path = os.path.dirname(__file__)
@@ -64,7 +64,7 @@ def save():
 	if request.method == "POST":
 		bill_info = request.form.get("bill_info")
 		customer_info = request.form.get("customer_info")
-		time_info = time.strftime('%Y-%m-%d %H:%M',time.localtime(time.time()))
+		time_info = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))
 		print(time_info)
 		#当日账单文件地址
 		file_name = time.strftime('%Y-%m-%d',time.localtime(time.time()))+"账单.txt"
@@ -396,6 +396,64 @@ def save_add_dishes():
 	if request.method == "POST":
 		#data = request.get_data().decode()
 		#real_data = urllib.parse.unquote(data)
-		data = request.form
-		print(data)
+		add_dishes_info_list = request.form.getlist("add_dishes_info[]")
+		customer_info = add_dishes_info_list[0].strip()
+		for root_path,dir_names,file_names in os.walk(data_path):
+			for file_name in file_names:
+				if file_name[0:len(file_name)-6] in customer_info:
+					file_path = os.path.join(root_path,file_name)
+					new_bill = ""
+					new_file_content = []
+					with open(file_path,"r") as f:
+						f_content = f.read()
+						bills = f_content.split("——————————————————————————————")
+						for bill in bills:
+							old_bill_info = bill
+							if customer_info in bill:
+								new_bill_info = bill
+								for add_dish_info in add_dishes_info_list[1:len(add_dishes_info_list)]:
+									add_dish_name = add_dish_info.split("&&&")[0]
+									add_dish_volumn = int(add_dish_info.split("&&&")[1])
+									add_dish_real_name = add_dish_name.split()[0]
+									add_dish_solo_price = int(add_dish_name.split()[1].strip("元"))
+									add_dish_price = add_dish_solo_price*add_dish_volumn
+									#新加的菜没在菜单中
+									if add_dish_real_name not in bill:
+										old_line = re.search("具体消费信息：",old_bill_info).group(0)
+										new_line = old_line+"\n"+add_dish_real_name+" 单价："+str(add_dish_solo_price)+"元 份数："+str(add_dish_volumn)+"份 共："+str(add_dish_solo_price*add_dish_volumn)+"元"
+										new_bill_info = new_bill_info.replace(old_line,new_line)
+										#更新总价
+										new_total_price = 0
+										for price_info in re.findall("共：[0-9]*元",new_bill_info):
+											price = int(price_info.strip("共：").strip("元"))
+											new_total_price += price
+										new_total_price_part = "本账单共需支付："+str(new_total_price)+"元"
+										old_total_price_part = re.search("本账单共需支付：[0-9]*元",new_bill_info).group(0)
+										new_bill_info = new_bill_info.replace(old_total_price_part,new_total_price_part)
+									else:
+										for line in bill.split("\n"):
+											old_line = line
+											#新加的菜所在行
+											if add_dish_real_name in line:
+												old_volumn_part = re.search("份数：[0-9]*份",old_line).group(0)
+												old_volumn = int(old_volumn_part.strip("份数：").strip("份"))
+												new_volumn = old_volumn+add_dish_volumn
+												new_price = add_dish_solo_price*new_volumn
+												new_line = add_dish_real_name+" 单价："+str(add_dish_solo_price)+"元 份数："+str(new_volumn)+"份 共："+str(new_price)+"元"
+												new_bill_info = new_bill_info.replace(old_line,new_line)
+											#更新总价
+											new_total_price = 0
+											for price_info in re.findall("共：[0-9]*元",new_bill_info):
+												price = int(price_info.strip("共：").strip("元"))
+												new_total_price += price
+											new_total_price_part = "本账单共需支付："+str(new_total_price)+"元"
+											old_total_price_part = re.search("本账单共需支付：[0-9]*元",new_bill_info).group(0)
+											new_bill_info = new_bill_info.replace(old_total_price_part,new_total_price_part)
+								new_file_content.append(new_bill_info)
+							else:
+								new_file_content.append(old_bill_info)
+					rep_content = "——————————————————————————————".join(new_file_content)
+					print(rep_content)
+					with open(file_path,"w") as f:
+						f.write(rep_content)
 		return "ok"

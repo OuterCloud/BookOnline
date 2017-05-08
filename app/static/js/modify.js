@@ -20,14 +20,25 @@ $(function(){
 	});
 	//保存加餐
 	$('#save_add_bill').click(function (){
+		//从前端获取顾客信息（餐头）
+		var re_customer = new RegExp("^[\\s\\S]*顾客信息：[\\s\\S]*$","");
+		var old_bill_info = $("#modify_share").html();
+		var lines = old_bill_info.split("<br>");
+		var customer_info = ""
+		for (var i = 0; i < lines.length; i++) {
+			if (re_customer.test($.trim(lines[i])) == true) {
+				customer_info = lines[i];
+			}
+		}
 		//把加餐信息与old_bill_info合并并传到后台
 		var add_dishes_info = new Array();
+		add_dishes_info.push(customer_info)
 		$(".amount").each(function(){
     		if ($(this).val() != "0") {
     			var add_dish_info = {}
     			var add_volumn = $(this).val();
     			var add_dish_name = $(this).prev("div").html();
-    			add_dish_info[add_dish_name] = add_volumn;
+    			add_dish_info = add_dish_name+"&&&"+add_volumn;
     			add_dishes_info.push(add_dish_info);
     		}
   		});
