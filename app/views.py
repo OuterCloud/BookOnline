@@ -167,7 +167,7 @@ def favor():
 								dish_sales = re.findall(dish["dish_name"].split(" ")[0]+".*份",f_content)
 								if dish_sales:
 									for dish_sale_info in dish_sales:
-										print(dish_sale_info)
+										#print(dish_sale_info)
 										volumn = re.search("份数：[0-9]*份",dish_sale_info)
 										if volumn:
 											rep_volumn = volumn.group(0).replace("份","")
